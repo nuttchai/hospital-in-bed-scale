@@ -3,13 +3,17 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./Dashboard.css";
 import LineGraph from "../../components/LineGraph/LineGraph";
 import WeightCard from "../../components/WeightCard/WeightCard";
+import WeightTable from "../../components/WeightTable/WeightTable";
+import FilterData from "../../utils/FilterData";
+import DescriptionText from "../../constants/DescriptionText";
 import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
+import { IsWeightVaild } from "../../utils/DataValidator";
 import { FormatToLineData } from "../../utils/FormatData";
 import { FormatTime } from "../../utils/DateTime";
 import { FetchSheetData } from "../../api/SheetAPI";
-import { LINE_CHART_DESCRIPTION } from "../../constants/DescriptionText";
-import FilterData from "../../utils/FilterData";
+
+const weightUnit = DescriptionText.weightUnit || "kg";
 
 const Dashboard = () => {
   const [sheetData, setSheetData] = useState([]);
@@ -19,9 +23,6 @@ const Dashboard = () => {
     type: FILTER_TYPE.LATEST_24_HRS,
     customDate: null,
   });
-  const [lineDesc, setLineDesc] = useState(
-    LINE_CHART_DESCRIPTION.LATEST_24_HRS
-  );
   const [isFilter, setIsFilter] = useState(false);
 
   const fetchContent = useCallback(async () => {
@@ -48,32 +49,67 @@ const Dashboard = () => {
   }, [sheetData, filterOptions]);
 
   if (!isFilter) {
-    return <div>Loading Page...</div>;
+    return <div>Loading Data...</div>;
   }
 
   let LineGraphComponent,
-    WeightCardComponent = <div>No Data Shown</div>;
-
-  if (lineData.length > 1) {
-    LineGraphComponent = <LineGraph lineData={lineData} lineDesc={lineDesc} />;
-  }
+    WeightCardComponent,
+    WeightTableComponent = <div>No Data Shown</div>;
 
   if (filteredData.length > 0) {
-    const latestValue = filteredData[filteredData.length - 1];
-    const latestDateTime = `${latestValue.Date}, ${FormatTime(
-      latestValue.Time
-    )}`;
-    const latestWeight = latestValue.Result / 1000;
+    const dateHeader =
+      filterOptions.type === FILTER_TYPE.LATEST_24_HRS
+        ? DescriptionText.last24Hrs
+        : filteredData[0].Date;
 
-    WeightCardComponent = (
-      <WeightCard dateTime={latestDateTime} weight={latestWeight} />
+    LineGraphComponent = (
+      <LineGraph
+        lineData={lineData}
+        date={dateHeader}
+        weightUnit={weightUnit}
+      />
     );
+    WeightTableComponent = (
+      <WeightTable
+        data={filteredData}
+        date={dateHeader}
+        weightUnit={weightUnit}
+      />
+    );
+  }
+
+  if (sheetData.length > 0) {
+    let index = sheetData.length - 1;
+
+    while (!IsWeightVaild(sheetData[index].Result)) {
+      if (index === 0) {
+        break;
+      }
+      index--;
+    }
+
+    if (index >= 0) {
+      const latestValue = sheetData[index];
+      const latestDate = latestValue.Date;
+      const latestTime = FormatTime(latestValue.Time);
+      const latestDateTime = `${latestDate}, ${latestTime}`;
+      const latestWeight = latestValue.Result;
+
+      WeightCardComponent = (
+        <WeightCard
+          dateTime={latestDateTime}
+          weight={latestWeight}
+          weightUnit={weightUnit}
+        />
+      );
+    }
   }
 
   return (
     <div>
       {LineGraphComponent}
       {WeightCardComponent}
+      {WeightTableComponent}
     </div>
   );
 };

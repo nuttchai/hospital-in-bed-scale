@@ -1,3 +1,5 @@
+import React from "react";
+
 const WeightCard = (props) => {
   return (
     <div>
@@ -7,10 +9,6 @@ const WeightCard = (props) => {
       </div>
     </div>
   );
-};
-
-WeightCard.defaultProps = {
-  weightUnit: "kg",
 };
 
 export default WeightCard;

@@ -1,5 +1,3 @@
-import FILTER_TYPE from "../constants/FilterLineDataType";
-
 export const FormatTime = (givenTime) => {
   const time = givenTime.split(":");
   let hour = time[0];

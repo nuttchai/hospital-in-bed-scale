@@ -1,22 +1,25 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Chart from "react-google-charts";
 
 const LineGraph = (props) => {
-  const LineChartOptions = {
-    hAxis: {
-      title: props.lineDesc.xAxis,
-    },
-    vAxis: {
-      title: props.lineDesc.yAxis,
-    },
-    series: {
-      1: { curveType: "function" },
-    },
-  };
+  const LineChartOptions = useMemo(
+    () => ({
+      hAxis: {
+        title: "Date & Time",
+      },
+      vAxis: {
+        title: `Weight (${props.weightUnit})`,
+      },
+      series: {
+        1: { curveType: "function" },
+      },
+    }),
+    [props.weightUnit]
+  );
 
   return (
     <div className="container mt-5 lineChart">
-      <h2>Patient Weight ({props.lineDesc.date})</h2>
+      <h2>Patient Weight ({props.date})</h2>
       <Chart
         width={"700px"}
         height={"410px"}

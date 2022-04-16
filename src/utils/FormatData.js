@@ -1,7 +1,7 @@
 import FILTER_TYPE from "../constants/FilterLineDataType";
 import { FormatTime } from "./DateTime";
 
-const FormatYValue = (weight) => parseFloat(weight) / 1000;
+const FormatYValue = (weight) => parseFloat(weight);
 
 const FormatXValue = (date, time, filtertype, datePrev = "") => {
   let xAxis = "";
@@ -15,17 +15,17 @@ const FormatXValue = (date, time, filtertype, datePrev = "") => {
   return xAxis;
 };
 
-export const FormatToLineData = (lineData, filterOptions) => {
-  if (lineData.length === 0) {
+export const FormatToLineData = (filteredData, filterOptions) => {
+  if (filteredData.length === 0) {
     return [];
   }
   let datePrev = "";
   const filterType = filterOptions.type;
   const result = [["x", "Set 1"]];
 
-  lineData.forEach((item) => {
+  filteredData.forEach((item) => {
     const date = item.Date;
-    const time = item.Time;
+    const time = FormatTime(item.Time);
     const yValue = FormatYValue(item.Result);
     const xValue = FormatXValue(date, time, filterType, datePrev);
 
