@@ -21,13 +21,23 @@ const RESULT_MOCK = [
   },
   {
     Date: "16/4/2022",
-    Time: "3:44",
+    Time: "10:44",
     Result: "3120.7",
   },
   {
     Date: "16/4/2022",
-    Time: "3:45",
-    Result: "Error",
+    Time: "13:45",
+    Result: "3420",
+  },
+  {
+    Date: "16/4/2022",
+    Time: "14:45",
+    Result: "3420",
+  },
+  {
+    Date: "17/4/2022",
+    Time: "1:45",
+    Result: "3420",
   },
 ];
 

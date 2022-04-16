@@ -1,6 +1,7 @@
 import moment from "moment";
 
 import { FormatTime } from "./DateTime";
+import { IsWeightVaild } from "./DataValidator";
 import FILTER_TYPE from "../constants/FilterLineDataType";
 
 const filterLatest24Hrs = (sheetData) => {
@@ -12,13 +13,27 @@ const filterLatest24Hrs = (sheetData) => {
   sheetData.forEach((item) => {
     const weight = item.Result;
 
-    if (weight !== "Error") {
+    if (IsWeightVaild(weight)) {
       const date = item.Date;
       const time = FormatTime(item.Time);
 
       if (date > reqDate || (date === reqDate && time > reqTime)) {
         result.push(item);
       }
+    }
+  });
+
+  return result;
+};
+
+const filterWithNoError = (sheetData) => {
+  const result = [];
+
+  sheetData.forEach((item) => {
+    const weight = item.Result;
+
+    if (IsWeightVaild(weight)) {
+      result.push(item);
     }
   });
 
@@ -36,7 +51,7 @@ const FilterData = (
       filteredData = filterLatest24Hrs(sheetData);
       break;
     default:
-      filteredData = sheetData;
+      filteredData = filterWithNoError(sheetData);
       break;
   }
 

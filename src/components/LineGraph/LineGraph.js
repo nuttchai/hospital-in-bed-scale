@@ -1,15 +1,13 @@
 import React from "react";
 import Chart from "react-google-charts";
 
-import { LINE_CHART_DESCRIPTION } from "../../constants/DescriptionText";
-
 const LineGraph = (props) => {
   const LineChartOptions = {
     hAxis: {
-      title: props.lineDescription.xAxis,
+      title: props.lineDesc.xAxis,
     },
     vAxis: {
-      title: props.lineDescription.yAxis,
+      title: props.lineDesc.yAxis,
     },
     series: {
       1: { curveType: "function" },
@@ -18,7 +16,7 @@ const LineGraph = (props) => {
 
   return (
     <div className="container mt-5 lineChart">
-      <h2>Patient Weight ({props.lineDescription.date})</h2>
+      <h2>Patient Weight ({props.lineDesc.date})</h2>
       <Chart
         width={"700px"}
         height={"410px"}
@@ -30,11 +28,6 @@ const LineGraph = (props) => {
       />
     </div>
   );
-};
-
-LineGraph.defaultProps = {
-  lineData: [["x", "Set 1"]],
-  lineDescription: LINE_CHART_DESCRIPTION.LATEST_24_HRS,
 };
 
 export default LineGraph;
