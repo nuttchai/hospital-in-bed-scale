@@ -1,46 +1,40 @@
 import React from "react";
 import Chart from "react-google-charts";
-import RESULT_MOCK from "../../data/ResultMock";
 
-const LineChartOptions = {
-  hAxis: {
-    title: "Time",
-  },
-  vAxis: {
-    title: "Weight (kg)",
-  },
-  series: {
-    1: { curveType: "function" },
-  },
-};
+import { LINE_CHART_DESCRIPTION } from "../../constants/DescriptionText";
 
 const LineGraph = (props) => {
-  // const raw = props.data
-  const raw = RESULT_MOCK;
-  const data = [["x", "Set 1"]];
-  const day = "2020-06-01";
-
-  raw.forEach((item) => {
-    const result = item.Result;
-    result !== "Error" && data.push([item.Time, parseFloat(result) / 1000]);
-  });
-
-  console.log(data);
+  const LineChartOptions = {
+    hAxis: {
+      title: props.lineDescription.xAxis,
+    },
+    vAxis: {
+      title: props.lineDescription.yAxis,
+    },
+    series: {
+      1: { curveType: "function" },
+    },
+  };
 
   return (
     <div className="container mt-5 lineChart">
-      <h2>Patient Weight ({day})</h2>
+      <h2>Patient Weight ({props.lineDescription.date})</h2>
       <Chart
         width={"700px"}
         height={"410px"}
         chartType="LineChart"
         loader={<div>Loading Chart</div>}
-        data={data}
+        data={props.lineData}
         options={LineChartOptions}
         rootProps={{ "data-testid": "2" }}
       />
     </div>
   );
+};
+
+LineGraph.defaultProps = {
+  lineData: [["x", "Set 1"]],
+  lineDescription: LINE_CHART_DESCRIPTION.LATEST_24_HRS,
 };
 
 export default LineGraph;
