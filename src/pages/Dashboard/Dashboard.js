@@ -23,7 +23,7 @@ const Dashboard = () => {
     type: FILTER_TYPE.LATEST_24_HRS,
     customDate: null,
   });
-  const [isFilter, setIsFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchContent = useCallback(async () => {
     try {
@@ -45,10 +45,10 @@ const Dashboard = () => {
 
     setFilteredData(filteredData);
     setLineData(lineData);
-    setIsFilter(true);
+    setIsLoading(true);
   }, [sheetData, filterOptions]);
 
-  if (!isFilter) {
+  if (!isLoading) {
     return <div>Loading Data...</div>;
   }
 
