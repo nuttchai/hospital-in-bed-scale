@@ -1,6 +1,6 @@
 const RESULT_MOCK = [
   {
-    Date: "15/4/2022",
+    Date: "14/4/2022",
     Time: "1:13",
     Result: "3136.28",
   },
@@ -37,6 +37,11 @@ const RESULT_MOCK = [
   {
     Date: "17/4/2022",
     Time: "1:45",
+    Result: "3420",
+  },
+  {
+    Date: "17/4/2022",
+    Time: "4:45",
     Result: "3420",
   },
 ];

@@ -26,6 +26,20 @@ const filterLatest24Hrs = (sheetData) => {
   return result;
 };
 
+const filterWithCustomDate = (sheetData, customDate) => {
+  const result = [];
+
+  sheetData.forEach((item) => {
+    const weight = item.Result;
+
+    if (IsWeightVaild(weight) && item.Date === customDate) {
+      result.push(item);
+    }
+  });
+
+  return result;
+};
+
 const filterWithNoError = (sheetData) => {
   const result = [];
 
@@ -49,6 +63,9 @@ const FilterData = (
   switch (filterOptions.type) {
     case FILTER_TYPE.LATEST_24_HRS:
       filteredData = filterLatest24Hrs(sheetData);
+      break;
+    case FILTER_TYPE.CUSTOM_DATE:
+      filteredData = filterWithCustomDate(sheetData, filterOptions.customDate);
       break;
     default:
       filteredData = filterWithNoError(sheetData);
