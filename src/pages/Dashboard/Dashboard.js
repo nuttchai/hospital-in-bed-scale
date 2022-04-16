@@ -10,7 +10,7 @@ import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
 import { IsWeightVaild } from "../../utils/DataValidator";
 import { FormatToLineData } from "../../utils/FormatData";
-import { FormatTime } from "../../utils/DateTime";
+import { FormatTime } from "../../utils/FormatData";
 import { FetchSheetData } from "../../api/SheetAPI";
 
 const weightUnit = DescriptionText.weightUnit || "kg";

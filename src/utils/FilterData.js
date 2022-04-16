@@ -1,6 +1,6 @@
 import moment from "moment";
 
-import { FormatTime } from "./DateTime";
+import { FormatTime } from "./FormatData";
 import { IsWeightVaild } from "./DataValidator";
 import FILTER_TYPE from "../constants/FilterLineDataType";
 
