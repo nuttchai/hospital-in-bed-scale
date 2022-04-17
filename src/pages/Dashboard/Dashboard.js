@@ -124,16 +124,20 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      {LineGraphComponent}
-      {WeightCardComponent}
-      {WeightTableComponent}
-      <Dropdown
-        options={unqiueDates}
-        onClick={() => setOpenDropdown(!openDropdown)}
-        onSelectItem={(value) => handleDateChange(value)}
-        isOpen={openDropdown}
-      />
+    <div className="dashboard">
+      <div className="column left">
+        <div className="content line-graph">{LineGraphComponent}</div>
+        <div className="content weight-card">{WeightCardComponent}</div>
+      </div>
+      <div className="column right">
+        <Dropdown
+          options={unqiueDates}
+          onClick={() => setOpenDropdown(!openDropdown)}
+          onSelectItem={(value) => handleDateChange(value)}
+          isOpen={openDropdown}
+        />
+        <div className="content weight-table">{WeightTableComponent}</div>
+      </div>
     </div>
   );
 };

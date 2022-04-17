@@ -1,0 +1,41 @@
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dashboard .column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard .column.left {
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.dashboard .column.right {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.dashboard .column .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem;
+  border: 1px solid #ccc;
+  background-color: aliceblue;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.weight-card {
+  width: 30%;
+}
+
+.weight-table {
+  width: 100%;
+}

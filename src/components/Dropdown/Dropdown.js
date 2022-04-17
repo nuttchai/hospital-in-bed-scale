@@ -4,20 +4,23 @@ import "./Dropdown.css";
 
 const DropdownItem = (props) => {
   return (
-    <div className="dropdown-item" onClick={props.onSelectItem}>
-      {props.value}
+    <div className="item" onClick={props.onSelectItem}>
+      <div className="text">{props.value}</div>
     </div>
   );
 };
 
 const Dropdown = (props) => {
   return (
-    <div className="container">
-      <div className="dropdown-btn" onClick={() => props.onClick()}>
-        Date
+    <div className="dropdown">
+      <div
+        className={"button " + (props.isOpen ? "open" : "close")}
+        onClick={() => props.onClick()}
+      >
+        <div className="text">Date</div>
       </div>
       {props.isOpen && (
-        <div>
+        <div className="item-container">
           {props.options.map((option) => (
             <DropdownItem
               key={option}
