@@ -5,7 +5,7 @@ const LineGraph = (props) => {
   const LineChartOptions = useMemo(
     () => ({
       hAxis: {
-        title: "Date & Time",
+        title: props.hAxisTitle,
       },
       vAxis: {
         title: `Weight (${props.weightUnit})`,
@@ -14,9 +14,9 @@ const LineGraph = (props) => {
         1: { curveType: "function" },
       },
       backgroundColor: "transparent",
-      title: `Patient Weight (${props.date})`,
+      title: `Average Patient Weight (${props.date})`,
     }),
-    [props.weightUnit, props.date]
+    [props.weightUnit, props.date, props.hAxisTitle]
   );
 
   return (
@@ -30,6 +30,10 @@ const LineGraph = (props) => {
       rootProps={{ "data-testid": "2" }}
     />
   );
+};
+
+LineGraph.defautlProps = {
+  hAxisTitle: "Date & Time Interval",
 };
 
 export default LineGraph;

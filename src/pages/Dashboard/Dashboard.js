@@ -5,8 +5,10 @@ import LineGraph from "../../components/LineGraph/LineGraph";
 import WeightCard from "../../components/WeightCard/WeightCard";
 import WeightTable from "../../components/WeightTable/WeightTable";
 import Dropdown from "../../components/Dropdown/Dropdown";
+import Light from "../../components/Light/Light";
 import FilterData from "../../utils/FilterData";
 import GetUniqueDates from "../../utils/GetUniqueDates";
+import GetLatestData from "../../utils/GetLatestData";
 import DescriptionText from "../../constants/DescriptionText";
 import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
@@ -29,6 +31,16 @@ const Dashboard = () => {
   const [unqiueDates, setUnqiueDates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
+
+  const handleDateChange = (dropdownSelection) => {
+    const newFilterOption =
+      dropdownSelection === defaultDropdownSelection
+        ? { type: FILTER_TYPE.LATEST_24_HRS, customDate: null }
+        : { type: FILTER_TYPE.CUSTOM_DATE, customDate: dropdownSelection };
+
+    setFilterOptions(newFilterOption);
+    setOpenDropdown(false);
+  };
 
   const fetchContent = useCallback(async () => {
     try {
@@ -70,13 +82,22 @@ const Dashboard = () => {
         ? DescriptionText.last24Hrs
         : filteredData[0].Date;
 
+    const hAxisTitle =
+      filterOptions.type === FILTER_TYPE.LATEST_24_HRS
+        ? DescriptionText.dateTime
+        : DescriptionText.timeOnly;
+
+    const latestWeight = GetLatestData(sheetData).latestWeight;
+
     LineGraphComponent = (
       <LineGraph
         lineData={lineData}
         date={dateHeader}
+        hAxisTitle={hAxisTitle}
         weightUnit={weightUnit}
       />
     );
+
     WeightTableComponent = (
       <WeightTable
         data={filteredData}
@@ -84,44 +105,11 @@ const Dashboard = () => {
         weightUnit={weightUnit}
       />
     );
+
+    WeightCardComponent = latestWeight && (
+      <WeightCard weight={latestWeight} weightUnit={weightUnit} />
+    );
   }
-
-  if (sheetData.length > 0) {
-    let index = sheetData.length - 1;
-
-    while (!IsWeightVaild(sheetData[index].Result)) {
-      if (index === 0) {
-        break;
-      }
-      index--;
-    }
-
-    if (index >= 0) {
-      const latestValue = sheetData[index];
-      const latestDate = latestValue.Date;
-      const latestTime = FormatTime(latestValue.Time);
-      const latestDateTime = `${latestDate}, ${latestTime}`;
-      const latestWeight = latestValue.Result;
-
-      WeightCardComponent = (
-        <WeightCard
-          dateTime={latestDateTime}
-          weight={latestWeight}
-          weightUnit={weightUnit}
-        />
-      );
-    }
-  }
-
-  const handleDateChange = (dropdownSelection) => {
-    const newFilterOption =
-      dropdownSelection === defaultDropdownSelection
-        ? { type: FILTER_TYPE.LATEST_24_HRS, customDate: null }
-        : { type: FILTER_TYPE.CUSTOM_DATE, customDate: dropdownSelection };
-
-    setFilterOptions(newFilterOption);
-    setOpenDropdown(false);
-  };
 
   return (
     <div className="dashboard">
@@ -137,6 +125,7 @@ const Dashboard = () => {
           isOpen={openDropdown}
         />
         <div className="content weight-table">{WeightTableComponent}</div>
+        <Light />
       </div>
     </div>
   );

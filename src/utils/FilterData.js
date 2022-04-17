@@ -1,6 +1,6 @@
 import moment from "moment";
 
-import { FormatTime } from "./FormatData";
+import { FormatTime, FormatDataEveryHalfHour } from "./FormatData";
 import { IsWeightVaild } from "./DataValidator";
 import FILTER_TYPE from "../constants/FilterLineDataType";
 
@@ -72,7 +72,8 @@ const FilterData = (
       break;
   }
 
-  return filteredData;
+  const formattedFilteredData = FormatDataEveryHalfHour(filteredData);
+  return formattedFilteredData;
 };
 
 export default FilterData;
