@@ -11,7 +11,7 @@ import GetUniqueDates from "../../utils/GetUniqueDates";
 import GetLightStatus from "../../utils/GetLightStatus";
 import DescriptionText from "../../constants/DescriptionText";
 import LightStatus from "../../constants/LightStatus";
-// import RESULT_MOCK from "../../data/ResultMock";
+import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
 import {
   GetLatestData,
@@ -21,7 +21,7 @@ import {
   FormatToLineData,
   FormatDataEveryHalfHour,
 } from "../../utils/FormatData";
-import { FetchSheetData } from "../../api/SheetAPI";
+// import { FetchSheetData } from "../../api/SheetAPI";
 
 const weightUnit = DescriptionText.weightUnit || "kg";
 const defaultDropdownSelection = "default";
@@ -52,8 +52,8 @@ const Dashboard = () => {
 
   const fetchContent = useCallback(async () => {
     try {
-      const data = await FetchSheetData();
-      // const data = RESULT_MOCK; // Saving Limited Number Of Request
+      // const data = await FetchSheetData();
+      const data = RESULT_MOCK; // Saving Limited Number Of Request
       setSheetData(data);
     } catch (error) {
       console.log(error);
@@ -151,7 +151,7 @@ const Dashboard = () => {
         ? DescriptionText.dateTime
         : DescriptionText.timeOnly;
 
-    LineGraphComponent = lineData.length > 1 && (
+    LineGraphComponent = (
       <div className="content line-graph">
         <LineGraph
           lineData={lineData}
