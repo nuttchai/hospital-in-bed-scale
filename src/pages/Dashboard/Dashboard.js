@@ -52,8 +52,8 @@ const Dashboard = () => {
 
   const fetchContent = useCallback(async () => {
     try {
-      // const data = await FetchSheetData();
-      const data = RESULT_MOCK; // Saving Limited Number Of Request
+      const data = await FetchSheetData();
+      // const data = RESULT_MOCK; // Saving Limited Number Of Request
       setSheetData(data);
     } catch (error) {
       console.log(error);
