@@ -4,7 +4,7 @@ import "./WeightCard.css";
 
 const WeightCard = (props) => {
   const displayedValue = props.weight
-    ? `${props.weight} ${props.weightUnit}`
+    ? `${parseFloat(props.weight).toFixed(2)} ${props.weightUnit}`
     : "-";
 
   return (
