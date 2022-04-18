@@ -11,7 +11,7 @@ import GetUniqueDates from "../../utils/GetUniqueDates";
 import GetLightStatus from "../../utils/GetLightStatus";
 import DescriptionText from "../../constants/DescriptionText";
 import LightStatus from "../../constants/LightStatus";
-import RESULT_MOCK from "../../data/ResultMock";
+// import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
 import {
   GetLatestData,
