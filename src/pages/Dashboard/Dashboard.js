@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import Papa from "papaparse";
 
 import "./Dashboard.css";
 import LineGraph from "../../components/LineGraph/LineGraph";
@@ -22,6 +23,8 @@ import {
 } from "../../utils/FormatData";
 import { FetchSheetData } from "../../api/SheetAPI";
 
+// const SPREADSHEET_URL = process.env.REACT_APP_SPREADSHEET_URL;
+const MINUTE_MS = 60000;
 const weightUnit = DescriptionText.weightUnit || "kg";
 const defaultDropdownSelection = "default";
 
@@ -50,10 +53,21 @@ const Dashboard = () => {
     setOpenDropdown(false);
   };
 
+  // useEffect(() => {
+  //   Papa.parse(SPREADSHEET_URL, {
+  //     download: true,
+  //     header: true,
+  //     complete: function (results) {
+  //       var data = results.data;
+  //       setSheetData(data);
+  //     },
+  //   });
+  // }, []);
+
   const fetchContent = useCallback(async () => {
     try {
-      // const data = await FetchSheetData();
-      const data = RESULT_MOCK; // Saving Limited Number Of Request
+      const data = await FetchSheetData();
+      // const data = RESULT_MOCK; // Saving Limited Number Of Request
       setSheetData(data);
     } catch (error) {
       console.log(error);
@@ -62,6 +76,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchContent();
+    const interval = setInterval(() => {
+      fetchContent();
+    }, MINUTE_MS);
+
+    // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+    return () => clearInterval(interval);
   }, [fetchContent]);
 
   useEffect(() => {
