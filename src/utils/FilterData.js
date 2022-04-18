@@ -72,8 +72,7 @@ const FilterData = (
       break;
   }
 
-  const formattedFilteredData = FormatDataEveryHalfHour(filteredData);
-  return formattedFilteredData;
+  return filteredData;
 };
 
 export default FilterData;

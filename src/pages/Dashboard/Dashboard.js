@@ -16,7 +16,10 @@ import {
   GetLatestData,
   GetLatestDataWithCompleteAverage,
 } from "../../utils/GetLatestData";
-import { FormatToLineData } from "../../utils/FormatData";
+import {
+  FormatToLineData,
+  FormatDataEveryHalfHour,
+} from "../../utils/FormatData";
 import { FetchSheetData } from "../../api/SheetAPI";
 
 const weightUnit = DescriptionText.weightUnit || "kg";
@@ -63,11 +66,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     const _filteredData = FilterData(sheetData, filterOptions);
-    const _lineData = FormatToLineData(_filteredData, filterOptions);
+    const _formattedData = FormatDataEveryHalfHour(_filteredData);
+    const _lineData = FormatToLineData(_formattedData, filterOptions);
     const _unqiueDates = GetUniqueDates(sheetData);
     _unqiueDates.push(defaultDropdownSelection);
 
-    setFilteredData(_filteredData);
+    setFilteredData(_formattedData);
     setLineData(_lineData);
     setUnqiueDates(_unqiueDates);
     setIsLoading(true);
@@ -78,7 +82,11 @@ const Dashboard = () => {
       type: FILTER_TYPE.LATEST_24_HRS,
       customDate: null,
     });
-    setFilteredDataWithLast24Hrs(_filteredDataWithLast24Hrs);
+    const _formattedDataWithLast24Hrs = FormatDataEveryHalfHour(
+      _filteredDataWithLast24Hrs
+    );
+
+    setFilteredDataWithLast24Hrs(_formattedDataWithLast24Hrs);
   }, [sheetData]);
 
   if (!isLoading) {
