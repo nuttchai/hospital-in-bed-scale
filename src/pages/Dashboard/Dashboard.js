@@ -52,8 +52,8 @@ const Dashboard = () => {
 
   const fetchContent = useCallback(async () => {
     try {
-      const data = await FetchSheetData();
-      // const data = RESULT_MOCK; // Saving Limited Number Of Request
+      // const data = await FetchSheetData();
+      const data = RESULT_MOCK; // Saving Limited Number Of Request
       setSheetData(data);
     } catch (error) {
       console.log(error);
@@ -83,7 +83,12 @@ const Dashboard = () => {
     LatestWeightComponent,
     AverageWeightComponent,
     DropdownComponent;
-  let LightComponent = <Light color={LightStatus.INACTIVE.color} />;
+
+  let LightComponent = (
+    <div className="content light">
+      <Light color={LightStatus.INACTIVE.color} />
+    </div>
+  );
 
   if (sheetData.length > 0) {
     const latestData = GetLatestData(sheetData);
@@ -98,19 +103,25 @@ const Dashboard = () => {
     unqiueDates.push(defaultDropdownSelection);
 
     LatestWeightComponent = (
-      <WeightCard
-        weight={latestWeight}
-        descText="Latest Weight"
-        weightUnit={weightUnit}
-      />
+      <div className="content weight-card">
+        <WeightCard
+          weight={latestWeight}
+          weightUnit={weightUnit}
+          title="Latest Weight"
+          decsription={`${latestData.Date} ${latestData.Time}`}
+        />
+      </div>
     );
 
     AverageWeightComponent = (
-      <WeightCard
-        weight={averageWeight}
-        descText={`Average Weight (Last ${AVERAGE_GIVEN_TIME.VALUE} ${AVERAGE_GIVEN_TIME.UNIT})`}
-        weightUnit={weightUnit}
-      />
+      <div className="content weight-card">
+        <WeightCard
+          weight={averageWeight}
+          weightUnit={weightUnit}
+          title="Average Weight"
+          decsription={`Last ${AVERAGE_GIVEN_TIME.VALUE} ${AVERAGE_GIVEN_TIME.UNIT}`}
+        />
+      </div>
     );
 
     DropdownComponent = (
@@ -122,7 +133,11 @@ const Dashboard = () => {
       />
     );
 
-    LightComponent = <Light color={lightStatus.color} />;
+    LightComponent = (
+      <div className="content light">
+        <Light color={lightStatus.color} />
+      </div>
+    );
   }
 
   if (filteredData.length > 0) {
@@ -136,21 +151,25 @@ const Dashboard = () => {
         ? DescriptionText.dateTime
         : DescriptionText.timeOnly;
 
-    LineGraphComponent = (
-      <LineGraph
-        lineData={lineData}
-        date={dateHeader}
-        hAxisTitle={hAxisTitle}
-        weightUnit={weightUnit}
-      />
+    LineGraphComponent = lineData.length > 1 && (
+      <div className="content line-graph">
+        <LineGraph
+          lineData={lineData}
+          date={dateHeader}
+          hAxisTitle={hAxisTitle}
+          weightUnit={weightUnit}
+        />
+      </div>
     );
 
     WeightTableComponent = (
-      <WeightTable
-        data={filteredData}
-        date={dateHeader}
-        weightUnit={weightUnit}
-      />
+      <div className="content weight-table">
+        <WeightTable
+          data={filteredData}
+          date={dateHeader}
+          weightUnit={weightUnit}
+        />
+      </div>
     );
   }
 
@@ -158,14 +177,14 @@ const Dashboard = () => {
     sheetData.length > 0 ? (
       <div className="dashboard">
         <div className="column left">
-          <div className="content line-graph">{LineGraphComponent}</div>
-          <div className="content weight-card">{LatestWeightComponent}</div>
-          <div className="content weight-card">{AverageWeightComponent}</div>
+          {LineGraphComponent}
+          {LatestWeightComponent}
+          {AverageWeightComponent}
         </div>
         <div className="column right">
-          <div className="dropdown">{DropdownComponent}</div>
-          <div className="content weight-table">{WeightTableComponent}</div>
-          <div className="content light">{LightComponent}</div>
+          {DropdownComponent}
+          {WeightTableComponent}
+          {LightComponent}
         </div>
       </div>
     ) : (

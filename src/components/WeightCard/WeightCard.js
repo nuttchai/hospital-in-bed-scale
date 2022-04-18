@@ -10,7 +10,8 @@ const WeightCard = (props) => {
   return (
     <div className="weight-card">
       <div className="text-value">{displayedValue}</div>
-      <div className="text-desc">{props.descText}</div>
+      <div className="title">{props.title}</div>
+      <div className="decsription">{props.decsription}</div>
       <div>{props.dateTime}</div>
     </div>
   );

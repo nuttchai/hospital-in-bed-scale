@@ -44,16 +44,20 @@ export const GetAverageWeightWithinGivenTime = (
       item.Date + " " + item.Time,
       "DD/MM/YYYY HH:mm"
     );
+    const weight = item.Result;
+    const isWeightVaild = IsWeightVaild(weight);
     const isDateVaild = IsFirstDateSameOrGreaterThanSecondDate(
       itemDateTime,
       reqDateTime
     );
 
-    if (isDateVaild) {
-      total += parseFloat(item.Result);
+    if (isDateVaild && isWeightVaild) {
+      total += parseFloat(weight);
       count++;
     }
   });
 
-  return (total / count).toFixed(3) || null;
+  if (count === 0) return null;
+
+  return (total / count).toFixed(3);
 };
