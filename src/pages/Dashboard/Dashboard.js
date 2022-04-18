@@ -8,13 +8,15 @@ import Dropdown from "../../components/Dropdown/Dropdown";
 import Light from "../../components/Light/Light";
 import FilterData from "../../utils/FilterData";
 import GetUniqueDates from "../../utils/GetUniqueDates";
-import GetLatestData from "../../utils/GetLatestData";
+import CheckLightStatus from "../../utils/CheckLightStatus";
 import DescriptionText from "../../constants/DescriptionText";
 import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
-import { IsWeightVaild } from "../../utils/DataValidator";
+import {
+  GetLatestData,
+  GetLatestDataWithCompleteAverage,
+} from "../../utils/GetLatestData";
 import { FormatToLineData } from "../../utils/FormatData";
-import { FormatTime } from "../../utils/FormatData";
 import { FetchSheetData } from "../../api/SheetAPI";
 
 const weightUnit = DescriptionText.weightUnit || "kg";
@@ -29,6 +31,9 @@ const Dashboard = () => {
     customDate: null,
   });
   const [unqiueDates, setUnqiueDates] = useState([]);
+  const [filteredDataWithLast24Hrs, setFilteredDataWithLast24Hrs] = useState(
+    []
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
 
@@ -68,26 +73,33 @@ const Dashboard = () => {
     setIsLoading(true);
   }, [sheetData, filterOptions]);
 
+  useEffect(() => {
+    const _filteredDataWithLast24Hrs = FilterData(sheetData, {
+      type: FILTER_TYPE.LATEST_24_HRS,
+      customDate: null,
+    });
+    setFilteredDataWithLast24Hrs(_filteredDataWithLast24Hrs);
+  }, [sheetData]);
+
   if (!isLoading) {
     return <div>Loading Data...</div>;
   }
 
   let LineGraphComponent,
     WeightCardComponent,
-    WeightTableComponent = <div>No Data Shown</div>;
+    WeightTableComponent,
+    LightComponent;
 
   if (filteredData.length > 0) {
+    const latestData = GetLatestData(sheetData);
     const dateHeader =
       filterOptions.type === FILTER_TYPE.LATEST_24_HRS
         ? DescriptionText.last24Hrs
         : filteredData[0].Date;
-
     const hAxisTitle =
       filterOptions.type === FILTER_TYPE.LATEST_24_HRS
         ? DescriptionText.dateTime
         : DescriptionText.timeOnly;
-
-    const latestWeight = GetLatestData(sheetData).latestWeight;
 
     LineGraphComponent = (
       <LineGraph
@@ -106,9 +118,19 @@ const Dashboard = () => {
       />
     );
 
-    WeightCardComponent = latestWeight && (
-      <WeightCard weight={latestWeight} weightUnit={weightUnit} />
+    WeightCardComponent = latestData.Result && (
+      <WeightCard weight={latestData.Result} weightUnit={weightUnit} />
     );
+
+    const latestDataWithCompleteAverage = GetLatestDataWithCompleteAverage(
+      filteredDataWithLast24Hrs
+    );
+    const lightStatus = CheckLightStatus(
+      latestData,
+      latestDataWithCompleteAverage
+    );
+
+    LightComponent = <Light color={lightStatus.color} />;
   }
 
   return (
@@ -125,7 +147,7 @@ const Dashboard = () => {
           isOpen={openDropdown}
         />
         <div className="content weight-table">{WeightTableComponent}</div>
-        <Light />
+        <div className="content light">{LightComponent}</div>
       </div>
     </div>
   );

@@ -88,8 +88,9 @@ const formatXValue = (date, time, filtertype, datePrev = "") => {
   return xAxis;
 };
 
-const getNext30Minutes = (dateTime) => {
-  const remainder = 30 - (dateTime.minute() % 30);
+// by default, getTimeNextGivenMinutes is set to 30 minutes
+const getTimeNextGivenMinutes = (dateTime, nextMinute = 30) => {
+  const remainder = nextMinute - (dateTime.minute() % nextMinute);
   const result = moment(dateTime).add(remainder, "minutes");
   return result;
 };
@@ -144,7 +145,7 @@ export const FormatDataEveryHalfHour = (sheetData) => {
     );
 
     if (i === 0) {
-      dateTime = getNext30Minutes(dateTimeCurrent);
+      dateTime = getTimeNextGivenMinutes(dateTimeCurrent);
       formatDateTime = dateTime.format("DD/MM/YYYY HH:mm");
       date = formatDateTime.split(" ")[0];
       time = formatDateTime.split(" ")[1];
@@ -162,7 +163,7 @@ export const FormatDataEveryHalfHour = (sheetData) => {
 
       count = 1;
       total = parseFloat(item.Result);
-      dateTime = getNext30Minutes(dateTimeCurrent);
+      dateTime = getTimeNextGivenMinutes(dateTimeCurrent);
       formatDateTime = dateTime.format("DD/MM/YYYY HH:mm");
       date = formatDateTime.split(" ")[0];
       time = formatDateTime.split(" ")[1];
@@ -177,6 +178,5 @@ export const FormatDataEveryHalfHour = (sheetData) => {
     }
   }
 
-  console.log(result);
   return result;
 };

@@ -7,16 +7,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.dashboard .column.left {
-  align-items: flex-end;
-  justify-content: flex-end;
-}
-
-.dashboard .column.right {
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
 }
 
 .dashboard .column .content {
@@ -34,8 +25,4 @@
 
 .weight-card {
   width: 30%;
-}
-
-.weight-table {
-  width: 100%;
 }

@@ -1,5 +1,6 @@
 :root {
   --radius: 10px;
+  --width: 200px;
 }
 
 .dropdown {
@@ -9,7 +10,7 @@
 
 .dropdown .button {
   height: 40px;
-  width: 300px;
+  min-width: var(--width);
   border-radius: var(--radius);
   background-color: salmon;
   padding: 0.5rem;
@@ -32,7 +33,7 @@
 
 .dropdown .item {
   height: 28px;
-  width: 300px;
+  min-width: var(--width);
   align-items: center;
   cursor: pointer;
   padding: 0.5rem;

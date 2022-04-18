@@ -4,7 +4,7 @@ const Light = (props) => {
   return (
     <div
       className="light-container"
-      style={{ "background-color": props.statusColor }}
+      style={{ "background-color": props.color }}
     ></div>
   );
 };

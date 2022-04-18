@@ -1,7 +1,7 @@
 import { IsWeightVaild } from "./DataValidator";
 import { FormatTime } from "./FormatData";
 
-const GetLatestData = (sheetData) => {
+export const GetLatestData = (sheetData) => {
   if (sheetData.length > 0) {
     let index = sheetData.length - 1;
 
@@ -15,14 +15,11 @@ const GetLatestData = (sheetData) => {
 
     if (index >= 0) {
       const latestValue = sheetData[index];
-      const latestDate = latestValue.Date;
-      const latestTime = FormatTime(latestValue.Time);
-      const latestDateTime = `${latestDate}, ${latestTime}`;
-      const latestWeight = latestValue.Result;
 
       return {
-        latestWeight,
-        latestDateTime,
+        Date: latestValue.Date,
+        Time: FormatTime(latestValue.Time),
+        Result: latestValue.Result,
       };
     }
   }
@@ -30,4 +27,13 @@ const GetLatestData = (sheetData) => {
   return null;
 };
 
-export default GetLatestData;
+export const GetLatestDataWithCompleteAverage = (filteredData) => {
+  const numberOfData = filteredData.length;
+
+  if (numberOfData > 1) {
+    let secondLastItem = filteredData[numberOfData - 2];
+    return secondLastItem;
+  }
+
+  return null;
+};
