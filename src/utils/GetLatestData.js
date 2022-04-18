@@ -1,5 +1,7 @@
+import moment from "moment";
 import { IsWeightVaild } from "./DataValidator";
 import { FormatTime } from "./FormatData";
+import { IsFirstDateSameOrGreaterThanSecondDate } from "./DateComparer";
 
 export const GetLatestData = (sheetData) => {
   if (sheetData.length > 0) {
@@ -27,13 +29,31 @@ export const GetLatestData = (sheetData) => {
   return null;
 };
 
-export const GetLatestDataWithCompleteAverage = (filteredData) => {
-  const numberOfData = filteredData.length;
+export const GetAverageWeightWithinGivenTime = (
+  sheetData,
+  givenTime = 1,
+  format = "days"
+) => {
+  const dateTime = moment();
+  const reqDateTime = dateTime.subtract(givenTime, format);
+  let total = 0;
+  let count = 0;
 
-  if (numberOfData > 1) {
-    let secondLastItem = filteredData[numberOfData - 2];
-    return secondLastItem;
-  }
+  sheetData.forEach((item) => {
+    const itemDateTime = moment(
+      item.Date + " " + item.Time,
+      "DD/MM/YYYY HH:mm"
+    );
+    const isDateVaild = IsFirstDateSameOrGreaterThanSecondDate(
+      itemDateTime,
+      reqDateTime
+    );
 
-  return null;
+    if (isDateVaild) {
+      total += parseFloat(item.Result);
+      count++;
+    }
+  });
+
+  return (total / count).toFixed(3) || null;
 };

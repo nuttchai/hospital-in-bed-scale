@@ -3,10 +3,15 @@ import moment from "moment";
 export const IsFirstDateSameOrGreaterThanSecondDate = (
   firstDate,
   secondDate,
-  format = "DD/MM/YYYY HH:mm"
+  format = null
 ) => {
-  const firstDateMoment = moment(firstDate, format);
-  const secondDateMoment = moment(secondDate, format);
+  let firstDateMoment = firstDate;
+  let secondDateMoment = secondDate;
+
+  if (format) {
+    firstDateMoment = moment(firstDate, format);
+    secondDateMoment = moment(secondDate, format);
+  }
 
   if (secondDateMoment.isAfter(firstDateMoment)) return false;
 

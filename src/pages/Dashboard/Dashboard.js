@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Papa from "papaparse";
 
 import "./Dashboard.css";
 import LineGraph from "../../components/LineGraph/LineGraph";
@@ -9,13 +8,14 @@ import Dropdown from "../../components/Dropdown/Dropdown";
 import Light from "../../components/Light/Light";
 import FilterData from "../../utils/FilterData";
 import GetUniqueDates from "../../utils/GetUniqueDates";
-import CheckLightStatus from "../../utils/CheckLightStatus";
+import GetLightStatus from "../../utils/GetLightStatus";
 import DescriptionText from "../../constants/DescriptionText";
+import LightStatus from "../../constants/LightStatus";
 import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
 import {
   GetLatestData,
-  GetLatestDataWithCompleteAverage,
+  GetAverageWeightWithinGivenTime,
 } from "../../utils/GetLatestData";
 import {
   FormatToLineData,
@@ -23,25 +23,22 @@ import {
 } from "../../utils/FormatData";
 import { FetchSheetData } from "../../api/SheetAPI";
 
-// const SPREADSHEET_URL = process.env.REACT_APP_SPREADSHEET_URL;
-const MINUTE_MS = 60000;
 const weightUnit = DescriptionText.weightUnit || "kg";
 const defaultDropdownSelection = "default";
+const MINUTE_MS = 60000;
+const AVERAGE_GIVEN_TIME = {
+  VALUE: 24,
+  UNIT: "hours",
+};
 
 const Dashboard = () => {
   const [sheetData, setSheetData] = useState([]);
-  const [lineData, setLineData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [openDropdown, setOpenDropdown] = useState(false);
   const [filterOptions, setFilterOptions] = useState({
     type: FILTER_TYPE.LATEST_24_HRS,
     customDate: null,
   });
-  const [unqiueDates, setUnqiueDates] = useState([]);
-  const [filteredDataWithLast24Hrs, setFilteredDataWithLast24Hrs] = useState(
-    []
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(false);
 
   const handleDateChange = (dropdownSelection) => {
     const newFilterOption =
@@ -52,17 +49,6 @@ const Dashboard = () => {
     setFilterOptions(newFilterOption);
     setOpenDropdown(false);
   };
-
-  // useEffect(() => {
-  //   Papa.parse(SPREADSHEET_URL, {
-  //     download: true,
-  //     header: true,
-  //     complete: function (results) {
-  //       var data = results.data;
-  //       setSheetData(data);
-  //     },
-  //   });
-  // }, []);
 
   const fetchContent = useCallback(async () => {
     try {
@@ -85,41 +71,62 @@ const Dashboard = () => {
   }, [fetchContent]);
 
   useEffect(() => {
-    const _filteredData = FilterData(sheetData, filterOptions);
-    const _formattedData = FormatDataEveryHalfHour(_filteredData);
-    const _lineData = FormatToLineData(_formattedData, filterOptions);
-    const _unqiueDates = GetUniqueDates(sheetData);
-    _unqiueDates.push(defaultDropdownSelection);
-
-    setFilteredData(_formattedData);
-    setLineData(_lineData);
-    setUnqiueDates(_unqiueDates);
-    setIsLoading(true);
-  }, [sheetData, filterOptions]);
-
-  useEffect(() => {
-    const _filteredDataWithLast24Hrs = FilterData(sheetData, {
-      type: FILTER_TYPE.LATEST_24_HRS,
-      customDate: null,
-    });
-    const _formattedDataWithLast24Hrs = FormatDataEveryHalfHour(
-      _filteredDataWithLast24Hrs
+    const _filteredData = FormatDataEveryHalfHour(
+      FilterData(sheetData, filterOptions)
     );
 
-    setFilteredDataWithLast24Hrs(_formattedDataWithLast24Hrs);
-  }, [sheetData]);
-
-  if (!isLoading) {
-    return <div>Loading Data...</div>;
-  }
+    setFilteredData(_filteredData);
+  }, [sheetData, filterOptions]);
 
   let LineGraphComponent,
-    WeightCardComponent,
     WeightTableComponent,
-    LightComponent;
+    LatestWeightComponent,
+    AverageWeightComponent,
+    DropdownComponent;
+  let LightComponent = <Light color={LightStatus.INACTIVE.color} />;
+
+  if (sheetData.length > 0) {
+    const latestData = GetLatestData(sheetData);
+    const latestWeight = latestData ? latestData.Result : null;
+    const averageWeight = GetAverageWeightWithinGivenTime(
+      sheetData,
+      AVERAGE_GIVEN_TIME.VALUE,
+      AVERAGE_GIVEN_TIME.UNIT
+    );
+    const lightStatus = GetLightStatus(latestWeight, averageWeight);
+    const unqiueDates = GetUniqueDates(sheetData);
+    unqiueDates.push(defaultDropdownSelection);
+
+    LatestWeightComponent = (
+      <WeightCard
+        weight={latestWeight}
+        descText="Latest Weight"
+        weightUnit={weightUnit}
+      />
+    );
+
+    AverageWeightComponent = (
+      <WeightCard
+        weight={averageWeight}
+        descText={`Average Weight (Last ${AVERAGE_GIVEN_TIME.VALUE} ${AVERAGE_GIVEN_TIME.UNIT})`}
+        weightUnit={weightUnit}
+      />
+    );
+
+    DropdownComponent = (
+      <Dropdown
+        options={unqiueDates}
+        onClick={() => setOpenDropdown(!openDropdown)}
+        onSelectItem={(value) => handleDateChange(value)}
+        isOpen={openDropdown}
+      />
+    );
+
+    LightComponent = <Light color={lightStatus.color} />;
+  }
 
   if (filteredData.length > 0) {
-    const latestData = GetLatestData(sheetData);
+    const lineData = FormatToLineData(filteredData, filterOptions);
     const dateHeader =
       filterOptions.type === FILTER_TYPE.LATEST_24_HRS
         ? DescriptionText.last24Hrs
@@ -145,40 +152,27 @@ const Dashboard = () => {
         weightUnit={weightUnit}
       />
     );
-
-    WeightCardComponent = latestData.Result && (
-      <WeightCard weight={latestData.Result} weightUnit={weightUnit} />
-    );
-
-    const latestDataWithCompleteAverage = GetLatestDataWithCompleteAverage(
-      filteredDataWithLast24Hrs
-    );
-    const lightStatus = CheckLightStatus(
-      latestData,
-      latestDataWithCompleteAverage
-    );
-
-    LightComponent = <Light color={lightStatus.color} />;
   }
 
-  return (
-    <div className="dashboard">
-      <div className="column left">
-        <div className="content line-graph">{LineGraphComponent}</div>
-        <div className="content weight-card">{WeightCardComponent}</div>
+  const content =
+    sheetData.length > 0 ? (
+      <div className="dashboard">
+        <div className="column left">
+          <div className="content line-graph">{LineGraphComponent}</div>
+          <div className="content weight-card">{LatestWeightComponent}</div>
+          <div className="content weight-card">{AverageWeightComponent}</div>
+        </div>
+        <div className="column right">
+          <div className="dropdown">{DropdownComponent}</div>
+          <div className="content weight-table">{WeightTableComponent}</div>
+          <div className="content light">{LightComponent}</div>
+        </div>
       </div>
-      <div className="column right">
-        <Dropdown
-          options={unqiueDates}
-          onClick={() => setOpenDropdown(!openDropdown)}
-          onSelectItem={(value) => handleDateChange(value)}
-          isOpen={openDropdown}
-        />
-        <div className="content weight-table">{WeightTableComponent}</div>
-        <div className="content light">{LightComponent}</div>
-      </div>
-    </div>
-  );
+    ) : (
+      <div> Loading Data... </div>
+    );
+
+  return content;
 };
 
 export default Dashboard;
