@@ -7,8 +7,10 @@ import DescriptionText from "../../constants/DescriptionText";
 
 const DropdownOption = (props) => {
   return (
-    <div className="item" onClick={props.onSelectOption}>
-      <div className="text">{props.value}</div>
+    <div>
+      <div className="item" onClick={props.onSelectOption}>
+        <div className="text">{props.value}</div>
+      </div>
       {!props.isLast && <LineSeparator />}
     </div>
   );

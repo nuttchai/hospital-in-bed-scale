@@ -55,12 +55,6 @@
   color: #1f1f21;
 }
 
-.dropdown .separator {
-  height: 1px;
-  width: 100%;
-  background-color: #ccc;
-}
-
 .dropdown .button .text .selectedDate {
   font-weight: bold;
 }
