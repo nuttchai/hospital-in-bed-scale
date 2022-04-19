@@ -23,13 +23,6 @@
   border-color: #1f1f21;
 }
 
-.dropdown .line-separator {
-  width: 100%;
-  height: 1px;
-  background-color: #aaa9a9;
-  margin: 0.5rem 0;
-}
-
 .dropdown .button.open {
   border-radius: var(--radius) var(--radius) 0 0;
 }

@@ -2,13 +2,14 @@ import React from "react";
 import { useState } from "react";
 
 import "./Dropdown.css";
+import LineSeparator from "../LineSeparator/LineSeparator";
 import DescriptionText from "../../constants/DescriptionText";
 
 const DropdownOption = (props) => {
   return (
     <div className="item" onClick={props.onSelectOption}>
       <div className="text">{props.value}</div>
-      {!props.isLast && <div className="line-separator" />}
+      {!props.isLast && <LineSeparator />}
     </div>
   );
 };
