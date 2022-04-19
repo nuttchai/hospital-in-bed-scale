@@ -63,7 +63,7 @@ const RESULT_MOCK = [
   {
     Date: "18/4/2022",
     Time: "19:00",
-    Result: "3.09",
+    Result: "5.09",
   },
 ];
 
