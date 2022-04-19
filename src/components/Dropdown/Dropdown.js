@@ -1,33 +1,55 @@
 import React from "react";
+import { useState } from "react";
 
 import "./Dropdown.css";
+import DescriptionText from "../../constants/DescriptionText";
 
-const DropdownItem = (props) => {
+const DropdownOption = (props) => {
   return (
-    <div className="item" onClick={props.onSelectItem}>
+    <div className="item" onClick={props.onSelectOption}>
       <div className="text">{props.value}</div>
+      {!props.isLast && <div className="line-separator" />}
     </div>
   );
 };
 
 const Dropdown = (props) => {
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(
+    DescriptionText.defaultDropdownSelection
+  );
+  const buttonText =
+    selectedOption === DescriptionText.defaultDropdownSelection
+      ? DescriptionText.last24Hrs
+      : selectedOption;
+
   return (
     <div className="dropdown">
       <div
-        className={"button " + (props.isOpen ? "open" : "close")}
-        onClick={() => props.onClick()}
+        className={"button " + (openDropdown ? "open" : "close")}
+        onClick={() => setOpenDropdown(!openDropdown)}
       >
-        <div className="text">Date</div>
+        <div className="text">
+          Date:&nbsp;<span className="selectedDate">{buttonText}</span>
+        </div>
       </div>
-      {props.isOpen && (
+      {openDropdown && (
         <div className="item-container">
-          {props.options.map((option) => (
-            <DropdownItem
-              key={option}
-              value={option}
-              onSelectItem={() => props.onSelectItem(option)}
-            />
-          ))}
+          {props.options.map((option, index, array) => {
+            const isLastElement = index === array.length - 1;
+            return (
+              <DropdownOption
+                key={option}
+                value={option}
+                isLast={isLastElement}
+                onSelectOption={() => {
+                  props.onSelectOption(option);
+                  setSelectedOption(option);
+                  setOpenDropdown(false);
+                }}
+              />
+            );
+          })}
         </div>
       )}
     </div>
