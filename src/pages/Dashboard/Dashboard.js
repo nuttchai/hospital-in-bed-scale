@@ -4,8 +4,9 @@ import "./Dashboard.css";
 import LineGraph from "../../components/LineGraph/LineGraph";
 import WeightCard from "../../components/WeightCard/WeightCard";
 import WeightTable from "../../components/WeightTable/WeightTable";
-import Dropdown from "../../components/Dropdown/Dropdown";
 import Light from "../../components/Light/Light";
+import Header from "../../components/Header/Header";
+import LineSeparator from "../../components/LineSeparator/LineSeparator";
 import FilterData from "../../utils/FilterData";
 import GetUniqueDates from "../../utils/GetUniqueDates";
 import GetLightStatus from "../../utils/GetLightStatus";
@@ -24,7 +25,7 @@ import {
 // import { FetchSheetData } from "../../api/SheetAPI";
 
 const weightUnit = DescriptionText.weightUnit || "kg";
-const defaultDropdownSelection = "default";
+
 const MINUTE_MS = 60000;
 const AVERAGE_GIVEN_TIME = {
   VALUE: 24,
@@ -34,7 +35,7 @@ const AVERAGE_GIVEN_TIME = {
 const Dashboard = () => {
   const [sheetData, setSheetData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [openDropdown, setOpenDropdown] = useState(false);
+  const [unqiueDates, setUniqueDates] = useState([]);
   const [filterOptions, setFilterOptions] = useState({
     type: FILTER_TYPE.LATEST_24_HRS,
     customDate: null,
@@ -42,12 +43,11 @@ const Dashboard = () => {
 
   const handleDateChange = (dropdownSelection) => {
     const newFilterOption =
-      dropdownSelection === defaultDropdownSelection
+      dropdownSelection === DescriptionText.defaultDropdownSelection
         ? { type: FILTER_TYPE.LATEST_24_HRS, customDate: null }
         : { type: FILTER_TYPE.CUSTOM_DATE, customDate: dropdownSelection };
 
     setFilterOptions(newFilterOption);
-    setOpenDropdown(false);
   };
 
   const fetchContent = useCallback(async () => {
@@ -78,11 +78,17 @@ const Dashboard = () => {
     setFilteredData(_filteredData);
   }, [sheetData, filterOptions]);
 
+  useEffect(() => {
+    const _uniqueDates = GetUniqueDates(sheetData);
+    _uniqueDates.push(DescriptionText.defaultDropdownSelection);
+
+    setUniqueDates(_uniqueDates);
+  }, [sheetData]);
+
   let LineGraphComponent,
     WeightTableComponent,
     LatestWeightComponent,
-    AverageWeightComponent,
-    DropdownComponent;
+    AverageWeightComponent;
 
   let LightComponent = (
     <div className="content light">
@@ -99,45 +105,27 @@ const Dashboard = () => {
       AVERAGE_GIVEN_TIME.UNIT
     );
     const lightStatus = GetLightStatus(latestWeight, averageWeight);
-    const unqiueDates = GetUniqueDates(sheetData);
-    unqiueDates.push(defaultDropdownSelection);
 
     LatestWeightComponent = (
-      <div className="content weight-card">
-        <WeightCard
-          weight={latestWeight}
-          weightUnit={weightUnit}
-          title="Latest Weight"
-          decsription={`${latestData.Date} ${latestData.Time}`}
-        />
-      </div>
-    );
-
-    AverageWeightComponent = (
-      <div className="content weight-card">
-        <WeightCard
-          weight={averageWeight}
-          weightUnit={weightUnit}
-          title="Average Weight"
-          decsription={`Last ${AVERAGE_GIVEN_TIME.VALUE} ${AVERAGE_GIVEN_TIME.UNIT}`}
-        />
-      </div>
-    );
-
-    DropdownComponent = (
-      <Dropdown
-        options={unqiueDates}
-        onClick={() => setOpenDropdown(!openDropdown)}
-        onSelectItem={(value) => handleDateChange(value)}
-        isOpen={openDropdown}
+      <WeightCard
+        status={lightStatus}
+        weight={latestWeight}
+        weightUnit={weightUnit}
+        title="Latest Weight"
+        decsription={`${latestData.Date} ${latestData.Time}`}
       />
     );
 
-    LightComponent = (
-      <div className="content light">
-        <Light color={lightStatus.color} />
-      </div>
+    AverageWeightComponent = (
+      <WeightCard
+        weight={averageWeight}
+        weightUnit={weightUnit}
+        title="Average Weight"
+        decsription={`Last ${AVERAGE_GIVEN_TIME.VALUE} ${AVERAGE_GIVEN_TIME.UNIT}`}
+      />
     );
+
+    LightComponent = <Light color={lightStatus.color} />;
   }
 
   if (filteredData.length > 0) {
@@ -176,15 +164,26 @@ const Dashboard = () => {
   const content =
     sheetData.length > 0 ? (
       <div className="dashboard">
-        <div className="column left">
-          {LineGraphComponent}
-          {LatestWeightComponent}
-          {AverageWeightComponent}
-        </div>
-        <div className="column right">
-          {DropdownComponent}
-          {WeightTableComponent}
-          {LightComponent}
+        <Header
+          dateOptions={unqiueDates}
+          onSelectOption={(value) => handleDateChange(value)}
+        />
+        <div className="data">
+          <div className="column left">
+            <div className="content">
+              {LightComponent}
+              <LineSeparator isMarginRequired={true} />
+              <div className="weight">
+                {LatestWeightComponent}
+                <LineSeparator isMarginRequired={true} isVertical={true} />
+                {AverageWeightComponent}
+              </div>
+            </div>
+          </div>
+          <div className="column right">
+            {LineGraphComponent}
+            {WeightTableComponent}
+          </div>
         </div>
       </div>
     ) : (
