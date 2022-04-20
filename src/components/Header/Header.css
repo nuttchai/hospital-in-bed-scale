@@ -1,5 +1,5 @@
 .header {
-  background: #1abc9c;
+  background: #a2aedc;
   color: white;
   padding: 1rem 3rem;
 }
@@ -36,7 +36,7 @@
 
 .header .content .left .text .scale-data {
   font-weight: 600;
-  color: #f1c40f;
+  color: #232f5c;
 }
 
 @media screen and (max-width: 800px) {
@@ -65,7 +65,7 @@
     text-align: center;
     margin-top: 10px;
     font-weight: 600;
-    color: #f1c40f;
+    color: #232f5c;
   }
 
   .header .content .left .text .scale-data {

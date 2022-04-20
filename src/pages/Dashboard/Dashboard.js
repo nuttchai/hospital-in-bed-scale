@@ -12,6 +12,10 @@ import GetUniqueDates from "../../utils/GetUniqueDates";
 import GetLightStatus from "../../utils/GetLightStatus";
 import DescriptionText from "../../constants/DescriptionText";
 import LightStatus from "../../constants/LightStatus";
+import Card from "../../components/Card/Card";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import TitleText from "../../components/TitleText/TitleText";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
 import {
@@ -22,8 +26,6 @@ import {
   FormatToLineData,
   FormatDataEveryHalfHour,
 } from "../../utils/FormatData";
-import Card from "../../components/Card/Card";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 // import { FetchSheetData } from "../../api/SheetAPI";
 
 const weightUnit = DescriptionText.weightUnit || "kg";
@@ -42,6 +44,8 @@ const Dashboard = () => {
     type: FILTER_TYPE.LATEST_24_HRS,
     customDate: null,
   });
+  const width = useWindowDimensions().width;
+  const isVerticalMode = width < 1084;
 
   const handleDateChange = (dropdownSelection) => {
     const newFilterOption =
@@ -111,6 +115,7 @@ const Dashboard = () => {
 
     LatestWeightComponent = (
       <WeightCard
+        className="latest-weight"
         status={lightStatus}
         weight={latestWeight}
         weightUnit={weightUnit}
@@ -121,6 +126,7 @@ const Dashboard = () => {
 
     AverageWeightComponent = (
       <WeightCard
+        className="average-weight"
         weight={averageWeight}
         weightUnit={weightUnit}
         title="Average Weight"
@@ -164,14 +170,13 @@ const Dashboard = () => {
         />
         <div className="data">
           <div className="column left">
-            <Card
-              className="card status"
-              title="status"
-              titleClass="card-title status-title"
-            >
-              {LightComponent}
+            <Card className="card status">
+              <div className="status-header">
+                <TitleText className="card-title status-title" title="status" />
+                {LightComponent}
+              </div>
               <LineSeparator isMarginRequired={true} />
-              <div className="weight">
+              <div className="status-content">
                 {LatestWeightComponent}
                 <LineSeparator isMarginRequired={true} isVertical={true} />
                 {AverageWeightComponent}
@@ -179,11 +184,11 @@ const Dashboard = () => {
             </Card>
           </div>
           <div className="column right">
-            <Card
-              className="card line"
-              title={`Average Patient Weight (${date})`}
-              titleClass="card-title"
-            >
+            <Card className="card line">
+              <TitleText
+                className="card-title"
+                title={`Average Patient Weight (${date})`}
+              />
               {LineGraphComponent}
             </Card>
             <Card className="card table" titleClass="card-title">

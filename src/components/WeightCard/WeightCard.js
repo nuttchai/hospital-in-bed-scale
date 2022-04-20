@@ -9,12 +9,14 @@ const WeightCard = (props) => {
     : "-";
 
   return (
-    <div className="weight-card">
-      <div className="text-value" style={{ color: props.status.color }}>
+    <div className={`weight-card ${props.className}`}>
+      <div className="weight-value" style={{ color: props.status.color }}>
         {displayedValue}
       </div>
-      <div className="title">{props.title}</div>
-      <div className="decsription">{props.decsription}</div>
+      <div className="weight-text">
+        <div className="title">{props.title}</div>
+        <div className="decsription">{props.decsription}</div>
+      </div>
       <div>{props.dateTime}</div>
     </div>
   );
@@ -22,6 +24,7 @@ const WeightCard = (props) => {
 
 WeightCard.defaultProps = {
   status: LightStatus.NORMAL,
+  className: "",
 };
 
 export default WeightCard;

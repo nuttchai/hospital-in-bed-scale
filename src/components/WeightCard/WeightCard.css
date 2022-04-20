@@ -3,14 +3,17 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100px;
 }
 
-.weight-card .text-value {
+.weight-card .weight-value {
   font-size: 1.5rem;
   font-weight: bold;
   color: darkcyan;
   margin-bottom: 0.5rem;
+}
+
+.weight-card .weight-text {
+  text-align: center;
 }
 
 .weight-card .title {

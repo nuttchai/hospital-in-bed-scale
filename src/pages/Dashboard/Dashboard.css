@@ -9,6 +9,7 @@
   width: 100%;
   position: absolute;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
@@ -29,11 +30,15 @@
   margin-bottom: 0rem;
 }
 
+.dashboard .column .card .status-header {
+  width: 100%;
+}
+
 .dashboard .column .card .status-title {
   margin-bottom: 0.7rem;
 }
 
-.dashboard .column .weight {
+.dashboard .column .status-content {
   display: flex;
 }
 
@@ -47,12 +52,40 @@
     padding: 1.5rem;
   }
 
-  .dashboard .column .card.status {
-    margin-right: 1rem;
-  }
-
   .dashboard .column .card .card-title {
     font-size: 23px;
+  }
+
+  .dashboard .column .card.status {
+    margin-right: 1rem;
+    flex-direction: row;
+  }
+
+  .dashboard .column .card .status-header {
+    flex: 0.5;
+  }
+
+  .dashboard .column .card .status-content {
+    flex: 1;
+    margin-left: 0.5rem;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .dashboard .column .card.status .line-separator.x {
+    display: none;
+  }
+
+  .dashboard .column .status-content .weight-card {
+    flex-direction: column-reverse;
+  }
+
+  .dashboard .column .status-content .weight-card .weight-value {
+    font-size: 30px;
+  }
+
+  .dashboard .column .status-content .weight-card .weight-text {
+    margin-bottom: 0.3rem;
   }
 }
 
@@ -69,6 +102,10 @@
   .dashboard .column .card .card-title {
     font-size: 20px;
   }
+
+  .dashboard .column .status-content .weight-card .weight-value {
+    font-size: 28px;
+  }
 }
 
 @media screen and (max-width: 400px) {
@@ -79,5 +116,17 @@
 
   .dashboard .column .card.status {
     margin-right: 0.25rem;
+  }
+
+  .dashboard .column .status-header {
+    display: none;
+  }
+
+  .dashboard .column .card .status-content {
+    margin-left: 0;
+  }
+
+  .dashboard .column .status-content .weight-card .weight-value {
+    font-size: 25px;
   }
 }

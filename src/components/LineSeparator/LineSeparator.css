@@ -1,5 +1,6 @@
 :root {
   --line-margin: 1rem;
+  --line-margin-mobile: 0.5rem;
 }
 
 .line-separator {
@@ -22,4 +23,16 @@
 
 .margin-include.y {
   margin: 0 var(--line-margin);
+}
+
+@media screen and (max-width: 1084px) and (min-width: 700px) {
+  .line-separator.margin-include.y {
+    margin: 0 3rem;
+  }
+}
+
+@media screen and (max-width: 699px) and (min-width: 500px) {
+  .line-separator.margin-include.y {
+    margin: 0 2rem;
+  }
 }
