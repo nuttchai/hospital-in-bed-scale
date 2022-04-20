@@ -10,9 +10,9 @@ const calculateWidth = (width) => {
     ? 700
     : width < 1084 && width >= 450
     ? width - 50
-    : width < 449 && width >= 390
+    : width < 449 && width >= 400
     ? 360
-    : 340;
+    : 320;
 };
 const calculateHeight = (calculatedWidth) => (calculatedWidth * 410) / 700;
 const unit = "px";
