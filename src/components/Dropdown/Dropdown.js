@@ -33,7 +33,7 @@ const Dropdown = (props) => {
         onClick={() => setOpenDropdown(!openDropdown)}
       >
         <div className="text">
-          Date:&nbsp;<span className="selectedDate">{buttonText}</span>
+          Date:&nbsp;<span className="selected-date">{buttonText}</span>
         </div>
       </div>
       {openDropdown && (
@@ -42,7 +42,7 @@ const Dropdown = (props) => {
             const isLastElement = index === array.length - 1;
             return (
               <DropdownOption
-                key={option}
+                key={`option-${index}`}
                 value={option}
                 isLast={isLastElement}
                 onSelectOption={() => {

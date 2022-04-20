@@ -1,6 +1,7 @@
 :root {
   --radius: 10px;
   --width: 200px;
+  --width-600: 150px;
 }
 
 .dropdown {
@@ -17,10 +18,11 @@
   text-align: center;
   align-items: center;
   cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   border-style: solid;
   border-width: thin;
-  border-color: #1f1f21;
+  border-color: #a9a9a9;
 }
 
 .dropdown .button.open {
@@ -32,7 +34,7 @@
   background-color: #ebecf0;
   border-style: solid;
   border-width: thin;
-  border-color: #1f1f21;
+  border-color: #a9a9a9;
 }
 
 .dropdown .item {
@@ -49,12 +51,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* text-transform: uppercase; */
   font-size: 16px;
   font-family: "Roboto", sans-serif;
-  color: #1f1f21;
+  color: #404040;
 }
 
-.dropdown .button .text .selectedDate {
+.dropdown .button .text .selected-date {
   font-weight: bold;
+}
+
+@media screen and (max-width: 600px) {
+  .dropdown .button {
+    height: 28px;
+  }
+
+  .dropdown .text {
+    font-size: 14px;
+  }
+
+  .dropdown .button,
+  .dropdown .item {
+    min-width: var(--width-600);
+  }
 }
