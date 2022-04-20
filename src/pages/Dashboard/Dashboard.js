@@ -22,6 +22,8 @@ import {
   FormatToLineData,
   FormatDataEveryHalfHour,
 } from "../../utils/FormatData";
+import Card from "../../components/Card/Card";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 // import { FetchSheetData } from "../../api/SheetAPI";
 
 const weightUnit = DescriptionText.weightUnit || "kg";
@@ -88,7 +90,8 @@ const Dashboard = () => {
   let LineGraphComponent,
     WeightTableComponent,
     LatestWeightComponent,
-    AverageWeightComponent;
+    AverageWeightComponent,
+    date;
 
   let LightComponent = (
     <div className="content light">
@@ -130,38 +133,29 @@ const Dashboard = () => {
 
   if (filteredData.length > 0) {
     const lineData = FormatToLineData(filteredData, filterOptions);
-    const dateHeader =
-      filterOptions.type === FILTER_TYPE.LATEST_24_HRS
-        ? DescriptionText.last24Hrs
-        : filteredData[0].Date;
     const hAxisTitle =
       filterOptions.type === FILTER_TYPE.LATEST_24_HRS
         ? DescriptionText.dateTime
         : DescriptionText.timeOnly;
+    date =
+      filterOptions.type === FILTER_TYPE.LATEST_24_HRS
+        ? DescriptionText.last24Hrs
+        : filteredData[0].Date;
 
     LineGraphComponent = (
-      <div className="content line-graph">
-        <LineGraph
-          lineData={lineData}
-          date={dateHeader}
-          hAxisTitle={hAxisTitle}
-          weightUnit={weightUnit}
-        />
-      </div>
+      <LineGraph
+        lineData={lineData}
+        hAxisTitle={hAxisTitle}
+        weightUnit={weightUnit}
+      />
     );
 
     WeightTableComponent = (
-      <div className="content weight-table">
-        <WeightTable
-          data={filteredData}
-          date={dateHeader}
-          weightUnit={weightUnit}
-        />
-      </div>
+      <WeightTable data={filteredData} date={date} weightUnit={weightUnit} />
     );
   }
 
-  const content =
+  const dashboardContent =
     sheetData.length > 0 ? (
       <div className="dashboard">
         <Header
@@ -170,7 +164,11 @@ const Dashboard = () => {
         />
         <div className="data">
           <div className="column left">
-            <div className="content">
+            <Card
+              className="card status"
+              title="status"
+              titleClass="status-title"
+            >
               {LightComponent}
               <LineSeparator isMarginRequired={true} />
               <div className="weight">
@@ -178,19 +176,27 @@ const Dashboard = () => {
                 <LineSeparator isMarginRequired={true} isVertical={true} />
                 {AverageWeightComponent}
               </div>
-            </div>
+            </Card>
           </div>
           <div className="column right">
-            {LineGraphComponent}
-            {WeightTableComponent}
+            <Card
+              className="card line"
+              title={`Average Patient Weight (${date})`}
+            >
+              {LineGraphComponent}
+            </Card>
+            <Card className="card table">{WeightTableComponent}</Card>
           </div>
         </div>
       </div>
     ) : (
-      <div> Loading Data... </div>
+      <div className="dashboard">
+        <Header />
+        <LoadingSpinner className="spinner" />
+      </div>
     );
 
-  return content;
+  return dashboardContent;
 };
 
 export default Dashboard;
