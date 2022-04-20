@@ -57,7 +57,7 @@
   }
 
   .dashboard .column .card.status {
-    margin-right: 1rem;
+    margin-right: 0.75rem;
     flex-direction: row;
   }
 
@@ -82,6 +82,7 @@
 
   .dashboard .column .status-content .weight-card .weight-value {
     font-size: 30px;
+    margin-bottom: 0;
   }
 
   .dashboard .column .status-content .weight-card .weight-text {
