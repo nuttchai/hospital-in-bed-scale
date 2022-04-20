@@ -65,12 +65,11 @@
   }
 
   .dashboard .column .card .status-header {
-    flex: 0.5;
+    flex: 0.75;
   }
 
   .dashboard .column .card .status-content {
     flex: 1;
-    margin-left: 0.5rem;
     justify-content: center;
     text-align: center;
   }
@@ -105,6 +104,10 @@
 
   .dashboard .column .card .card-title {
     font-size: 20px;
+  }
+
+  .dashboard .column .card .status-header {
+    flex: 0.5;
   }
 
   .dashboard .column .status-content .weight-card .weight-value {
