@@ -1,7 +1,26 @@
 import React, { useMemo } from "react";
 import Chart from "react-google-charts";
 
+import "./LineGraph.css";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+
+const calculateWidth = (width) => {
+  return width >= 1084
+    ? 700
+    : width < 1084 && width > 767
+    ? width - 80
+    : width < 767 && width > 450
+    ? width - 50
+    : 360;
+};
+const calculateHeight = (calculatedWidth) => (calculatedWidth * 410) / 700;
+const unit = "px";
+
 const LineGraph = (props) => {
+  const width = useWindowDimensions().width;
+  const calculatedWidth = calculateWidth(width);
+  const calculatedHeight = calculateHeight(calculatedWidth);
   const LineChartOptions = useMemo(
     () => ({
       hAxis: {
@@ -14,21 +33,23 @@ const LineGraph = (props) => {
         1: { curveType: "function" },
       },
       backgroundColor: "transparent",
-      title: `Average Patient Weight (${props.date})`,
+      legend: { position: "none" },
     }),
-    [props.weightUnit, props.date, props.hAxisTitle]
+    [props.weightUnit, props.hAxisTitle]
   );
 
   return (
-    <Chart
-      width={"700px"}
-      height={"410px"}
-      chartType="LineChart"
-      loader={<div>Loading Chart</div>}
-      data={props.lineData}
-      options={LineChartOptions}
-      rootProps={{ "data-testid": "2" }}
-    />
+    <div className="chart-container">
+      <Chart
+        width={calculatedWidth + unit}
+        height={calculatedHeight + unit}
+        chartType="LineChart"
+        loader={<LoadingSpinner className="chart-spinner" />}
+        data={props.lineData}
+        options={LineChartOptions}
+        rootProps={{ "data-testid": "2" }}
+      />
+    </div>
   );
 };
 

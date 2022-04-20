@@ -1,0 +1,9 @@
+.chart-spinner {
+  margin: 10rem 0;
+}
+
+@media screen and (max-width: 600px) {
+  .chart-spinner {
+    margin: 5rem 0;
+  }
+}

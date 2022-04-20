@@ -27,7 +27,7 @@ export const FormatToLineData = (filteredData, filterOptions) => {
 
   let datePrev = "";
   const filterType = filterOptions.type;
-  const result = [["x", "Set 1"]];
+  const result = [["x", ""]];
 
   filteredData.forEach((item) => {
     const date = item.Date;

@@ -42,7 +42,42 @@
     flex-direction: column;
   }
 
+  .dashboard .column .card {
+    margin: 0.75rem;
+    padding: 1.5rem;
+  }
+
   .dashboard .column .card.status {
     margin-right: 1rem;
+  }
+
+  .dashboard .column .card .card-title {
+    font-size: 23px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .dashboard .column .card {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  .dashboard .column .card.status {
+    margin-right: 0.5rem;
+  }
+
+  .dashboard .column .card .card-title {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .dashboard .column .card {
+    margin: 0.25rem;
+    padding: 0.75rem;
+  }
+
+  .dashboard .column .card.status {
+    margin-right: 0.25rem;
   }
 }

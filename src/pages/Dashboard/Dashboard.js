@@ -167,7 +167,7 @@ const Dashboard = () => {
             <Card
               className="card status"
               title="status"
-              titleClass="status-title"
+              titleClass="card-title status-title"
             >
               {LightComponent}
               <LineSeparator isMarginRequired={true} />
@@ -182,10 +182,13 @@ const Dashboard = () => {
             <Card
               className="card line"
               title={`Average Patient Weight (${date})`}
+              titleClass="card-title"
             >
               {LineGraphComponent}
             </Card>
-            <Card className="card table">{WeightTableComponent}</Card>
+            <Card className="card table" titleClass="card-title">
+              {WeightTableComponent}
+            </Card>
           </div>
         </div>
       </div>
