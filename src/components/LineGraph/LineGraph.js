@@ -9,7 +9,7 @@ const calculateWidth = (width) => {
   return width >= 1084
     ? 700
     : width < 1084 && width >= 450
-    ? width - 50
+    ? width / 1.05 - 50
     : width < 449 && width >= 400
     ? 360
     : 320;
