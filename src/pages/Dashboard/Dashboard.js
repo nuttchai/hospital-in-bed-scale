@@ -15,7 +15,6 @@ import LightStatus from "../../constants/LightStatus";
 import Card from "../../components/Card/Card";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import TitleText from "../../components/TitleText/TitleText";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
 import {
@@ -44,8 +43,6 @@ const Dashboard = () => {
     type: FILTER_TYPE.LATEST_24_HRS,
     customDate: null,
   });
-  const width = useWindowDimensions().width;
-  const isVerticalMode = width < 1084;
 
   const handleDateChange = (dropdownSelection) => {
     const newFilterOption =
