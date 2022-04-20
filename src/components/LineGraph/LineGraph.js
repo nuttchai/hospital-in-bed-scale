@@ -6,7 +6,13 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const calculateWidth = (width) => {
-  return width >= 1084 ? 700 : width < 1084 && width > 450 ? width - 50 : 360;
+  return width >= 1084
+    ? 700
+    : width < 1084 && width >= 450
+    ? width - 50
+    : width < 449 && width >= 390
+    ? 360
+    : 340;
 };
 const calculateHeight = (calculatedWidth) => (calculatedWidth * 410) / 700;
 const unit = "px";
