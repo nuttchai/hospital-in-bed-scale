@@ -15,7 +15,7 @@ import LightStatus from "../../constants/LightStatus";
 import Card from "../../components/Card/Card";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import TitleText from "../../components/TitleText/TitleText";
-import RESULT_MOCK from "../../data/ResultMock";
+// import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
 import {
   GetLatestData,
@@ -25,7 +25,7 @@ import {
   FormatToLineData,
   FormatDataEveryHalfHour,
 } from "../../utils/FormatData";
-// import { FetchSheetData } from "../../api/SheetAPI";
+import { FetchSheetData } from "../../api/SheetAPI";
 
 const weightUnit = DescriptionText.weightUnit || "kg";
 
@@ -55,8 +55,8 @@ const Dashboard = () => {
 
   const fetchContent = useCallback(async () => {
     try {
-      // const data = await FetchSheetData();
-      const data = RESULT_MOCK; // Saving Limited Number Of Request
+      const data = await FetchSheetData();
+      // const data = RESULT_MOCK; // Saving Limited Number Of Request
       setSheetData(data);
     } catch (error) {
       console.log(error);
