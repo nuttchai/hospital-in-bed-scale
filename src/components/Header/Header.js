@@ -15,15 +15,21 @@ const Header = (props) => {
             Dashboard <span className="scale-data">Scale Data</span>
           </div>
         </div>
-        <div className="right">
-          <Dropdown
-            options={props.dateOptions}
-            onSelectOption={props.onSelectOption}
-          />
-        </div>
+        {props.dateOptions && (
+          <div className="right">
+            <Dropdown
+              options={props.dateOptions}
+              onSelectOption={props.onSelectOption}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
+};
+
+Header.defaultProps = {
+  onSelectOption: (option) => console.log("onSelectOption not defined"),
 };
 
 export default Header;
