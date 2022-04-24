@@ -15,6 +15,7 @@ import LightStatus from "../../constants/LightStatus";
 import Card from "../../components/Card/Card";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import TitleText from "../../components/TitleText/TitleText";
+import EmptyContent from "../../components/EmptyContent/EmptyContent";
 // import RESULT_MOCK from "../../data/ResultMock";
 import FILTER_TYPE from "../../constants/FilterLineDataType";
 import {
@@ -91,8 +92,9 @@ const Dashboard = () => {
   let LineGraphComponent,
     WeightTableComponent,
     LatestWeightComponent,
-    AverageWeightComponent,
-    date;
+    AverageWeightComponent;
+
+  let date = DescriptionText.last24Hrs;
 
   let LightComponent = (
     <div className="content light">
@@ -156,6 +158,9 @@ const Dashboard = () => {
     WeightTableComponent = (
       <WeightTable data={filteredData} date={date} weightUnit={weightUnit} />
     );
+  } else {
+    LineGraphComponent = <EmptyContent />;
+    WeightTableComponent = <EmptyContent />;
   }
 
   const dashboardContent =
@@ -189,6 +194,12 @@ const Dashboard = () => {
               {LineGraphComponent}
             </Card>
             <Card className="card table" titleClass="card-title">
+              <TitleText
+                className={`card-title ${
+                  filteredData.length > 0 ? "weight-table-title-with-data" : ""
+                }`}
+                title={`Patient Weight Table (${date})`}
+              />
               {WeightTableComponent}
             </Card>
           </div>

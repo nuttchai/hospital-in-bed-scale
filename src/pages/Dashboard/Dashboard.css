@@ -45,6 +45,10 @@
   display: flex;
 }
 
+.weight-table-title-with-data {
+  margin-bottom: 1.5rem;
+}
+
 @media screen and (max-width: 1084px) {
   .dashboard .data {
     flex-direction: column;
